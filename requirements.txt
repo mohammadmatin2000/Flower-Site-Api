@@ -1,0 +1,10 @@
+django==4.2
+python-decouple
+psycopg[binary]
+djangorestframework
+markdown
+django-filter
+drf-yasg
+Pillow
+djangorestframework-simplejwt
+faker
