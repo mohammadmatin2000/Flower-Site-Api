@@ -27,8 +27,8 @@ class PlantProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlantProduct
         fields = ['id', 'name', 'scientific_name', 'slug', 'plant_type', 'description', 'care_instructions',
-                  'height_cm', 'price', 'discount_percent', 'stock', 'status', 'created_date', 'category', 'category_id',
-                  'images','detail_url','final_price']
+                  'height_cm', 'price', 'discount_percent','final_price', 'stock', 'status', 'created_date', 'category', 'category_id',
+                  'images','detail_url',]
     def get_detail_url(self, obj):
         request = self.context.get('request')
         url = reverse('plantproduct-detail', kwargs={'slug': obj.slug})
