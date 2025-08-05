@@ -11,6 +11,7 @@ class PlantProductViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]
     filterset_class = PlantProductFilter
+    lookup_field = 'slug'
 # ======================================================================================================================
 class PlantCategoryViewSet(viewsets.ModelViewSet):
     queryset = PlantCategory.objects.all()

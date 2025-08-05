@@ -1,9 +1,11 @@
+from django.utils import timezone
 from django.db import models
 # ======================================================================================================================
 class PlantCategory(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
-
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.title
 # ======================================================================================================================
@@ -33,7 +35,8 @@ class PlantProduct(models.Model):
     discount_percent = models.PositiveIntegerField(blank=True, null=True)
     stock = models.PositiveIntegerField(default=0)
     status = models.CharField(max_length=20, choices=PlantStatus.choices, default=PlantStatus.AVAILABLE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
 # ======================================================================================================================
@@ -41,6 +44,8 @@ class PlantImage(models.Model):
     product = models.ForeignKey(PlantProduct, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='plants/')
     alt_text = models.CharField(max_length=150, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     def __str__(self):
         return f"Image for {self.product.name}"
 # ======================================================================================================================

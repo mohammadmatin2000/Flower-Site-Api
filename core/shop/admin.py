@@ -21,10 +21,10 @@ class PlantImageAdmin(admin.ModelAdmin):
 
 @admin.register(PlantProduct)
 class PlantProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'plant_type', 'price', 'stock', 'status', 'created_at']
-    list_filter = ['category', 'plant_type', 'status', 'created_at']
+    list_display = ['name', 'category', 'plant_type', 'price', 'stock', 'status', 'created_date', 'updated_date']
+    list_filter = ['category', 'plant_type', 'status', 'created_date', 'updated_date']
     search_fields = ['name', 'scientific_name']
     prepopulated_fields = {'slug': ('name',)}
     inlines = [PlantImageInline]
-    readonly_fields = ['created_at']
+    readonly_fields = ['created_date', 'updated_date']
 # ======================================================================================================================
