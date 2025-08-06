@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from shop.models import PlantProduct
-
 User = get_user_model()
 # ======================================================================================================================
 class Comment(models.Model):

@@ -37,6 +37,12 @@ class PlantProduct(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.name
+
+    def final_price(self):
+        if self.discount_percent:
+            discount_amount = self.price * self.discount_percent / 100
+            return round(self.price - discount_amount, 2)
+        return self.price
 # ======================================================================================================================
 class PlantImage(models.Model):
     product = models.ForeignKey(PlantProduct, on_delete=models.CASCADE, related_name='images')

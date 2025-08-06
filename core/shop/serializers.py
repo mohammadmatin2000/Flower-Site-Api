@@ -23,7 +23,6 @@ class PlantProductSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=PlantCategory.objects.all())
     images = PlantImageSerializer(many=True, required=False)
     detail_url = serializers.SerializerMethodField()
-    final_price = serializers.SerializerMethodField()
     class Meta:
         model = PlantProduct
         fields = ['id', 'name', 'scientific_name', 'slug', 'plant_type', 'description', 'care_instructions',
@@ -38,9 +37,5 @@ class PlantProductSerializer(serializers.ModelSerializer):
         if self.context.get('view') and self.context['view'].action != 'list':
             representation.pop('detail_url', None)
         return representation
-    def get_final_price(self, obj):
-        if obj.discount_percent:
-            discount_amount = obj.price * obj.discount_percent / 100
-            return round(obj.price - discount_amount, 2)
-        return obj.price
+
 # ======================================================================================================================
