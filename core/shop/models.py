@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.db import models
 # ======================================================================================================================
 class PlantCategory(models.Model):
@@ -14,7 +13,6 @@ class PlantStatus(models.TextChoices):
     OUT_OF_STOCK = 'out_of_stock', 'ناموجود'
     COMING_SOON = 'coming_soon', 'به‌زودی'
 # ======================================================================================================================
-
 class PlantProduct(models.Model):
     PLANT_TYPES = [
         ('indoor', 'آپارتمانی'),
