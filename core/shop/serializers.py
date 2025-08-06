@@ -37,5 +37,12 @@ class PlantProductSerializer(serializers.ModelSerializer):
         if self.context.get('view') and self.context['view'].action != 'list':
             representation.pop('detail_url', None)
         return representation
-
+# ======================================================================================================================
+# این برای کارت ایتم ساخته شده
+class ProductMiniSerializer(serializers.ModelSerializer):
+    images = PlantImageSerializer(many=True, required=False)
+    category = PlantCategorySerializer(read_only=True)
+    class Meta:
+        model = PlantProduct
+        fields = ['name', 'images', 'category']
 # ======================================================================================================================

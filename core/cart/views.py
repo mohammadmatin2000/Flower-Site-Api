@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions
 from .models import Cart, CartItem
 from .serializers import CartSerializer, CartItemSerializer
+from shop.models import PlantStatus
 # ======================================================================================================================
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
@@ -14,7 +15,7 @@ class CartViewSet(viewsets.ModelViewSet):
         return Cart.objects.filter(user=self.request.user)
 # ======================================================================================================================
 class CartItemViewSet(viewsets.ModelViewSet):
-    queryset = CartItem.objects.all()
+    queryset = CartItem.objects.filter(product__status=PlantStatus.AVAILABLE)
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
