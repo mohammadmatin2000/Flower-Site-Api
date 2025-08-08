@@ -26,6 +26,8 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('order/', include('order.urls')),
     path('payment/', include('payment.urls')),
+    path('dashboard-admin/', include('dashboard_admin.urls')),
+    path('dashboard-user/', include('dashboard_user.urls')),
 
 
     path('swagger.<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),

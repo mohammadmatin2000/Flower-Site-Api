@@ -22,13 +22,14 @@ class PlantImageSerializer(serializers.ModelSerializer):
 class PlantProductSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField()
     list_url = serializers.SerializerMethodField()
+    add_to_cart_url = serializers.SerializerMethodField()
     category = serializers.PrimaryKeyRelatedField(queryset=PlantCategory.objects.all())
     images = PlantImageSerializer(many=True, required=False)
     class Meta:
         model = PlantProduct
         fields = ['id', 'name', 'scientific_name', 'slug', 'plant_type', 'description', 'care_instructions',
                   'height_cm', 'price', 'discount_percent','final_price', 'stock', 'status', 'created_date', 'category', 'category_id',
-                  'images','detail_url','list_url']
+                  'images','detail_url','list_url','add_to_cart_url']
     def get_detail_url(self, obj):
         request = self.context.get('request')
         url = reverse('plantproduct-detail', kwargs={'slug': obj.slug})
@@ -36,6 +37,13 @@ class PlantProductSerializer(serializers.ModelSerializer):
     def get_list_url(self, obj):
         request = self.context.get('request')
         return reverse('plantproduct-list', request=request)
+    def get_add_to_cart_url(self, obj):
+        request = self.context.get('request')
+        if request:
+            url = reverse('add-to-cart-redirect')
+            url += f'?slug={obj.slug}&quantity=1'
+            return request.build_absolute_uri(url)
+        return None
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if self.context.get('view') and self.context['view'].action != 'list':

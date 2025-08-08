@@ -2,12 +2,16 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.validators import ValidationError
 from decimal import Decimal
 from .serializers import CheckoutSerializer, OrderSerializer
 from .models import OrderModels, OrderItemModels
 from cart.models import Cart
+from shop.models import PlantProduct,PlantStatus
+from order.models import OrderModels,OrderItemModels,OrderStatusModels
 # ======================================================================================================================
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = OrderModels.objects.all()
@@ -69,4 +73,52 @@ class OrderViewSet(viewsets.ModelViewSet):
             )
 
         cart.items.all().delete()
+# ======================================================================================================================
+class AddToOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # گرفتن کارت فعال کاربر
+        cart = get_object_or_404(Cart, user=user)
+
+        if not cart.items.exists():
+            return Response({"detail": "سبد خرید خالی است."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # ایجاد یا گرفتن سفارش pending
+        order, created = OrderModels.objects.get_or_create(
+            user=user,
+            status=OrderStatusModels.PENDING,
+            defaults={'total_price': 0, 'final_price': 0}
+        )
+
+        # حذف آیتم‌های قبلی سفارش (اگر لازم باشه)
+        order.items.all().delete()
+
+        total_price = 0
+
+        for cart_item in cart.items.all():
+            # ایجاد یا آپدیت آیتم سفارش بر اساس کارت آیتم
+            order_item, created = OrderItemModels.objects.get_or_create(
+                order=order,
+                product=cart_item.product,
+                defaults={'quantity': cart_item.quantity, 'price': cart_item.product.price}
+            )
+            if not created:
+                order_item.quantity = cart_item.quantity
+                order_item.price = cart_item.product.price
+                order_item.save()
+
+            total_price += cart_item.product.final_price() * cart_item.quantity
+
+        order.total_price = total_price
+        order.final_price = total_price  # اینجا می‌تونی مالیات و تخفیف هم اعمال کنی
+        order.save()
+
+        # در نهایت کارت رو خالی کن
+        cart.items.all().delete()
+
+        return Response({"message": "تمام محصولات کارت به سفارش اضافه شدند."}, status=status.HTTP_200_OK)
+
 # ======================================================================================================================
