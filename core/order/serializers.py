@@ -1,12 +1,19 @@
 from rest_framework import serializers
 from cart.models import CartItem
-from .models import OrderModels, OrderItemModels, CouponModels
+from .models import OrderModels, CouponModels
+# ======================================================================================================================
+class CouponSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CouponModels
+        fields = ['code','discount_percent','max_usage_limit','used_by','expiration_date']
 # ======================================================================================================================
 class OrderSerializer(serializers.ModelSerializer):
+    coupon = CouponSerializer()
     class Meta:
         model = OrderModels
-        fields = '__all__'
-        read_only_fields = ['user', 'final_price', 'total_price', 'status']
+        fields = ['user','address','state','city','zip_code','cart','coupon','status','total_price','final_price',
+                  'created_date','updated_date','tax']
+        read_only_fields = ['user', 'final_price', 'total_price', 'status','tax']
 # ======================================================================================================================
 class CheckoutSerializer(serializers.Serializer):
     address = serializers.CharField()
@@ -32,33 +39,4 @@ class CheckoutSerializer(serializers.Serializer):
             except CouponModels.DoesNotExist:
                 raise serializers.ValidationError("کوپن وارد شده نامعتبر است.")
         return data
-    def create(self, validated_data):
-        user = self.context['request'].user
-        cart_items = validated_data['cart_items']
-        coupon = validated_data.get('coupon')
-        total_price = sum([item.product.final_price() * item.quantity for item in cart_items])
-        final_price = total_price
-        if coupon:
-            discount = total_price * (coupon.discount_percent / 100)
-            final_price -= discount
-            coupon.used_by.add(user)
-        order = OrderModels.objects.create(
-            user=user,
-            address=validated_data['address'],
-            city=validated_data['city'],
-            state=validated_data['state'],
-            zip_code=validated_data['zip_code'],
-            total_price=total_price,
-            final_price=final_price,
-            coupon=coupon if coupon else None
-        )
-        for item in cart_items:
-            OrderItemModels.objects.create(
-                order=order,
-                product=item.product,
-                price=item.product.final_price(),
-                quantity=item.quantity
-            )
-        cart_items.delete()
-        return order
 # ======================================================================================================================

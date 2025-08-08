@@ -50,5 +50,5 @@ class ProductMiniSerializer(serializers.ModelSerializer):
     category = PlantCategorySerializer(read_only=True)
     class Meta:
         model = PlantProduct
-        fields = ['name', 'images', 'category']
+        fields = ['name', 'images', 'category','price','discount_percent']
 # ======================================================================================================================

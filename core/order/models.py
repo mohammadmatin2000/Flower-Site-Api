@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from decimal import Decimal
 from shop.models import PlantProduct
 from cart.models import Cart
 from accounts.models import User, Profile
@@ -49,7 +50,7 @@ class OrderModels(models.Model):
     status = models.IntegerField(choices=OrderStatusModels.choices, default=OrderStatusModels.PENDING)
     total_price = models.DecimalField(max_digits=12, decimal_places=0)
     final_price = models.DecimalField(max_digits=12, decimal_places=0)
-    tax = models.DecimalField(max_digits=10, decimal_places=0, default=0)
+    tax = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.09))
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
