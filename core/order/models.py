@@ -4,7 +4,7 @@ from decimal import Decimal
 from shop.models import PlantProduct
 from cart.models import Cart
 from accounts.models import User, Profile
-# from payment.models import PaymentModels
+from payment.models import PaymentModels
 # ======================================================================================================================
 class OrderStatusModels(models.IntegerChoices):
     PENDING = 1, "در حال بررسی"
@@ -46,7 +46,7 @@ class OrderModels(models.Model):
     zip_code = models.CharField(max_length=20)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=True)
     coupon = models.ForeignKey(CouponModels, on_delete=models.SET_NULL, null=True, blank=True)
-    # payment = models.ForeignKey(PaymentModels, on_delete=models.SET_NULL, null=True, blank=True)
+    payment = models.ForeignKey(PaymentModels, on_delete=models.SET_NULL, null=True, blank=True)
     status = models.IntegerField(choices=OrderStatusModels.choices, default=OrderStatusModels.PENDING)
     total_price = models.DecimalField(max_digits=12, decimal_places=0)
     final_price = models.DecimalField(max_digits=12, decimal_places=0)
