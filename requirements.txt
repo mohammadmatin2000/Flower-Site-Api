@@ -10,3 +10,4 @@ djangorestframework-simplejwt
 faker
 requests
 django-filter
+gunicorn

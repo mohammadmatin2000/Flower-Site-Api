@@ -24,14 +24,9 @@ class RegisterViews(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
-
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-
-
-        # ساخت لینک فعال سازی
         uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
         token = default_token_generator.make_token(user)
         current_site = get_current_site(request).domain
@@ -64,7 +59,6 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
         current_site = get_current_site(request).domain
         reset_link = f"http://{current_site}{reverse('password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})}"
 
-        # ارسال ایمیل (باید تنظیمات ایمیل Django رو داشته باشی)
         send_mail(
             subject='درخواست بازیابی رمز عبور',
             message=f'برای تغییر رمز عبور خود روی لینک زیر کلیک کنید:\n{reset_link}',
