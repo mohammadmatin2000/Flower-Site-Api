@@ -30,9 +30,25 @@ class AdminSecuritySerializer(serializers.Serializer):
         return user
 # ======================================================================================================================
 class AdminProfileSerializer(serializers.ModelSerializer):
+    detail_url = serializers.SerializerMethodField()
+    list_url = serializers.SerializerMethodField()
     class Meta:
         model = Profile
-        fields = ['first_name', 'last_name', 'image']
+        fields = ['user','first_name', 'last_name', 'image','detail_url','list_url']
+    def get_detail_url(self, obj):
+        request = self.context.get('request')
+        url = reverse('admin-profile-detail', kwargs={'pk': obj.pk})
+        return request.build_absolute_uri(url) if request else url
+    def get_list_url(self, obj):
+        request = self.context.get('request')
+        return reverse('admin-profile-list', request=request)
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if self.context.get('view') and self.context['view'].action != 'list':
+            representation.pop('detail_url', None)
+        else:
+            representation.pop('list_url', None)
+        return representation
 # ======================================================================================================================
 class AdminUserSerializer(serializers.ModelSerializer):
     user_profile = AdminProfileSerializer(read_only=True)

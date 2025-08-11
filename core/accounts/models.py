@@ -43,7 +43,6 @@ class UserManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError(_("Superuser must have is_superuser=True."))
         return self.create_user(email, password, **extra_fields)
-
 # ======================================================================================================================
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
@@ -63,7 +62,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
 # ======================================================================================================================
 class Profile(models.Model):
     user = models.OneToOneField('User', on_delete=models.CASCADE, related_name="user_profile")
@@ -77,7 +75,6 @@ class Profile(models.Model):
         if self.first_name or self.last_name:
             return self.first_name + " " + self.last_name
         return "کاربر جدید"
-
 # ======================================================================================================================
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):

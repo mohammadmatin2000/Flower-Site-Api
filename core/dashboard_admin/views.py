@@ -26,15 +26,22 @@ class AdminUserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAdminOrSuperUser]
 # ======================================================================================================================
 class AdminProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
     serializer_class = AdminProfileSerializer
     permission_classes = [IsAdminOrSuperUser]
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        return Profile.objects.filter(user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        return Response(
+            {"detail": "ساخت پروفایل از طریق API مجاز نیست."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
     def perform_update(self, serializer):
         serializer.save()
+
+    def perform_destroy(self, instance):
+        pass
 # ======================================================================================================================
 class AdminProductViewSet(viewsets.ModelViewSet):
     queryset = PlantProduct.objects.all()
