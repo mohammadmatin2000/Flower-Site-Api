@@ -3,6 +3,8 @@ from shop.models import PlantProduct, PlantStatus
 from shop.models import PlantStatus
 from .models import Cart, CartItem
 from .serializers import CartSerializer, CartItemSerializer
+
+
 # ======================================================================================================================
 class CartViewSet(viewsets.ModelViewSet):
     queryset = Cart.objects.all()
@@ -14,6 +16,8 @@ class CartViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Cart.objects.filter(user=self.request.user)
+
+
 # ======================================================================================================================
 class CartItemViewSet(viewsets.ModelViewSet):
     queryset = CartItem.objects.filter(product__status=PlantStatus.AVAILABLE)
@@ -22,4 +26,6 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return CartItem.objects.filter(cart__user=self.request.user)
+
+
 # ======================================================================================================================

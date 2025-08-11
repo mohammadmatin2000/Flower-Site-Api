@@ -8,44 +8,112 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='PlantCategory',
+            name="PlantCategory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100, unique=True)),
-                ('slug', models.SlugField(unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100, unique=True)),
+                ("slug", models.SlugField(unique=True)),
             ],
         ),
         migrations.CreateModel(
-            name='PlantProduct',
+            name="PlantProduct",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('scientific_name', models.CharField(blank=True, max_length=150)),
-                ('slug', models.SlugField(unique=True)),
-                ('plant_type', models.CharField(choices=[('indoor', 'آپارتمانی'), ('outdoor', 'باغچه\u200cای'), ('succulent', 'ساکولنت'), ('flowering', 'گل\u200cدار'), ('bonsai', 'بونسای')], max_length=20)),
-                ('description', models.TextField(blank=True)),
-                ('care_instructions', models.TextField(blank=True)),
-                ('height_cm', models.DecimalField(blank=True, decimal_places=1, max_digits=5, null=True)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('discount_percent', models.PositiveIntegerField(blank=True, null=True)),
-                ('stock', models.PositiveIntegerField(default=0)),
-                ('status', models.CharField(choices=[('available', 'موجود'), ('out_of_stock', 'ناموجود'), ('coming_soon', 'به\u200cزودی')], default='available', max_length=20)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='plants', to='shop.plantcategory')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("scientific_name", models.CharField(blank=True, max_length=150)),
+                ("slug", models.SlugField(unique=True)),
+                (
+                    "plant_type",
+                    models.CharField(
+                        choices=[
+                            ("indoor", "آپارتمانی"),
+                            ("outdoor", "باغچه\u200cای"),
+                            ("succulent", "ساکولنت"),
+                            ("flowering", "گل\u200cدار"),
+                            ("bonsai", "بونسای"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("description", models.TextField(blank=True)),
+                ("care_instructions", models.TextField(blank=True)),
+                (
+                    "height_cm",
+                    models.DecimalField(
+                        blank=True, decimal_places=1, max_digits=5, null=True
+                    ),
+                ),
+                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "discount_percent",
+                    models.PositiveIntegerField(blank=True, null=True),
+                ),
+                ("stock", models.PositiveIntegerField(default=0)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("available", "موجود"),
+                            ("out_of_stock", "ناموجود"),
+                            ("coming_soon", "به\u200cزودی"),
+                        ],
+                        default="available",
+                        max_length=20,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="plants",
+                        to="shop.plantcategory",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='PlantImage',
+            name="PlantImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='plants/')),
-                ('alt_text', models.CharField(blank=True, max_length=150)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='shop.plantproduct')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="plants/")),
+                ("alt_text", models.CharField(blank=True, max_length=150)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="images",
+                        to="shop.plantproduct",
+                    ),
+                ),
             ],
         ),
     ]

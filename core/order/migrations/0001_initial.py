@@ -11,66 +11,162 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('cart', '0001_initial'),
-        ('shop', '0002_rename_created_at_plantproduct_created_date_and_more'),
+        ("cart", "0001_initial"),
+        ("shop", "0002_rename_created_at_plantproduct_created_date_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CouponModels',
+            name="CouponModels",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(max_length=20, unique=True)),
-                ('discount_percent', models.DecimalField(decimal_places=2, max_digits=5)),
-                ('max_usage_limit', models.PositiveIntegerField()),
-                ('expiration_date', models.DateField()),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('updated_date', models.DateTimeField(auto_now=True)),
-                ('used_by', models.ManyToManyField(blank=True, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("code", models.CharField(max_length=20, unique=True)),
+                (
+                    "discount_percent",
+                    models.DecimalField(decimal_places=2, max_digits=5),
+                ),
+                ("max_usage_limit", models.PositiveIntegerField()),
+                ("expiration_date", models.DateField()),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("updated_date", models.DateTimeField(auto_now=True)),
+                (
+                    "used_by",
+                    models.ManyToManyField(blank=True, to=settings.AUTH_USER_MODEL),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='UserAddressModels',
+            name="UserAddressModels",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('address', models.CharField(max_length=250)),
-                ('state', models.CharField(max_length=50)),
-                ('city', models.CharField(max_length=50)),
-                ('zip_code', models.CharField(max_length=20)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('updated_date', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("address", models.CharField(max_length=250)),
+                ("state", models.CharField(max_length=50)),
+                ("city", models.CharField(max_length=50)),
+                ("zip_code", models.CharField(max_length=20)),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("updated_date", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='OrderModels',
+            name="OrderModels",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('address', models.CharField(max_length=255)),
-                ('state', models.CharField(max_length=100)),
-                ('city', models.CharField(max_length=100)),
-                ('zip_code', models.CharField(max_length=20)),
-                ('status', models.IntegerField(choices=[(1, 'در حال بررسی'), (2, 'در حال پردازش'), (3, 'پرداخت\u200cشده'), (4, 'ارسال\u200cشده'), (5, 'لغوشده'), (6, 'ناموفق')], default=1)),
-                ('total_price', models.DecimalField(decimal_places=0, max_digits=12)),
-                ('final_price', models.DecimalField(decimal_places=0, max_digits=12)),
-                ('tax', models.DecimalField(decimal_places=0, default=0, max_digits=10)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('updated_date', models.DateTimeField(auto_now=True)),
-                ('cart', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='cart.cart')),
-                ('coupon', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='order.couponmodels')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='orders', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("address", models.CharField(max_length=255)),
+                ("state", models.CharField(max_length=100)),
+                ("city", models.CharField(max_length=100)),
+                ("zip_code", models.CharField(max_length=20)),
+                (
+                    "status",
+                    models.IntegerField(
+                        choices=[
+                            (1, "در حال بررسی"),
+                            (2, "در حال پردازش"),
+                            (3, "پرداخت\u200cشده"),
+                            (4, "ارسال\u200cشده"),
+                            (5, "لغوشده"),
+                            (6, "ناموفق"),
+                        ],
+                        default=1,
+                    ),
+                ),
+                ("total_price", models.DecimalField(decimal_places=0, max_digits=12)),
+                ("final_price", models.DecimalField(decimal_places=0, max_digits=12)),
+                (
+                    "tax",
+                    models.DecimalField(decimal_places=0, default=0, max_digits=10),
+                ),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("updated_date", models.DateTimeField(auto_now=True)),
+                (
+                    "cart",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="cart.cart",
+                    ),
+                ),
+                (
+                    "coupon",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="order.couponmodels",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="orders",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='OrderItemModels',
+            name="OrderItemModels",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('quantity', models.PositiveIntegerField()),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('updated_date', models.DateTimeField(auto_now=True)),
-                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='order.ordermodels')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='shop.plantproduct')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("quantity", models.PositiveIntegerField()),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("updated_date", models.DateTimeField(auto_now=True)),
+                (
+                    "order",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="items",
+                        to="order.ordermodels",
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="shop.plantproduct",
+                    ),
+                ),
             ],
         ),
     ]

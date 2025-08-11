@@ -7,13 +7,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0002_alter_ordermodels_tax'),
+        ("order", "0002_alter_ordermodels_tax"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ordermodels',
-            name='tax',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0.0899999999999999966693309261245303787291049957275390625'), max_digits=10),
+            model_name="ordermodels",
+            name="tax",
+            field=models.DecimalField(
+                decimal_places=2,
+                default=Decimal(
+                    "0.0899999999999999966693309261245303787291049957275390625"
+                ),
+                max_digits=10,
+            ),
         ),
     ]

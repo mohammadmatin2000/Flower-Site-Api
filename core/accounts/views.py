@@ -18,7 +18,10 @@ from .serializers import (
     SetNewPasswordSerializer,
     ActivationSerializer,
 )
+
 User = get_user_model()
+
+
 # ======================================================================================================================
 class RegisterViews(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -32,17 +35,20 @@ class RegisterViews(generics.GenericAPIView):
         current_site = get_current_site(request).domain
         activation_link = f"http://{current_site}{reverse('activate-account')}?uidb64={uidb64}&token={token}"
 
-
-
-        subject = 'فعالسازی حساب کاربری'
-        message = f'لطفا برای فعالسازی حساب خود روی لینک زیر کلیک کنید:\n{activation_link}'
-
-
+        subject = "فعالسازی حساب کاربری"
+        message = (
+            f"لطفا برای فعالسازی حساب خود روی لینک زیر کلیک کنید:\n{activation_link}"
+        )
 
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
+        return Response(
+            {
+                "detail": "ثبت‌نام با موفقیت انجام شد. لطفا ایمیل خود را برای فعالسازی چک کنید."
+            }
+        )
 
-        return Response({'detail': 'ثبت‌نام با موفقیت انجام شد. لطفا ایمیل خود را برای فعالسازی چک کنید.'})
+
 # ======================================================================================================================
 class RequestPasswordResetEmail(generics.GenericAPIView):
     serializer_class = EmailSerializer
@@ -50,7 +56,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        email = serializer.validated_data['email']
+        email = serializer.validated_data["email"]
         user = User.objects.get(email=email)
 
         uidb64 = urlsafe_base64_encode(force_bytes(user.id))
@@ -60,42 +66,61 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
         reset_link = f"http://{current_site}{reverse('password_reset_confirm', kwargs={'uidb64': uidb64, 'token': token})}"
 
         send_mail(
-            subject='درخواست بازیابی رمز عبور',
-            message=f'برای تغییر رمز عبور خود روی لینک زیر کلیک کنید:\n{reset_link}',
+            subject="درخواست بازیابی رمز عبور",
+            message=f"برای تغییر رمز عبور خود روی لینک زیر کلیک کنید:\n{reset_link}",
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[email],
             fail_silently=False,
         )
 
-        return Response({'detail': 'ایمیل بازیابی رمز ارسال شد.'}, status=status.HTTP_200_OK)
+        return Response(
+            {"detail": "ایمیل بازیابی رمز ارسال شد."}, status=status.HTTP_200_OK
+        )
+
+
 # ====================================================================
 class PasswordResetConfirmView(APIView):
     serializer_class = SetNewPasswordSerializer
+
     def post(self, request, uidb64, token, *args, **kwargs):
-        password = request.data.get('password')
+        password = request.data.get("password")
         if not password:
-            return Response({'error': 'رمز جدید ارسال نشده است.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "رمز جدید ارسال نشده است."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return Response({'error': 'کاربر پیدا نشد.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "کاربر پیدا نشد."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         if default_token_generator.check_token(user, token):
             user.password = make_password(password)
             user.save()
-            return Response({'detail': 'رمز عبور با موفقیت تغییر کرد.'})
+            return Response({"detail": "رمز عبور با موفقیت تغییر کرد."})
         else:
-            return Response({'error': 'لینک معتبر نیست یا منقضی شده.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "لینک معتبر نیست یا منقضی شده."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
 # ======================================================================================================================
 class ActivateAccount(APIView):
     serializer_class = ActivationSerializer
+
     def get(self, request, *args, **kwargs):
-        uidb64 = request.GET.get('uidb64')
-        token = request.GET.get('token')
+        uidb64 = request.GET.get("uidb64")
+        token = request.GET.get("token")
         if not uidb64 or not token:
-            return Response({'error': 'پارامترهای لازم ارسال نشده‌اند'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "پارامترهای لازم ارسال نشده‌اند"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
@@ -106,7 +131,12 @@ class ActivateAccount(APIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_verified = True
             user.save()
-            return Response({'detail': 'حساب کاربری شما با موفقیت فعال شد.'})
+            return Response({"detail": "حساب کاربری شما با موفقیت فعال شد."})
         else:
-            return Response({'error': 'لینک فعال‌سازی نامعتبر است یا منقضی شده.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "لینک فعال‌سازی نامعتبر است یا منقضی شده."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
 # ======================================================================================================================

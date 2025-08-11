@@ -5,6 +5,8 @@ from shop.models import PlantProduct
 from cart.models import Cart
 from accounts.models import User, Profile
 from payment.models import PaymentModels
+
+
 # ======================================================================================================================
 class OrderStatusModels(models.IntegerChoices):
     PENDING = 1, "در حال بررسی"
@@ -13,6 +15,8 @@ class OrderStatusModels(models.IntegerChoices):
     SHIPPED = 4, "ارسال‌شده"
     CANCELED = 5, "لغوشده"
     FAILED = 6, "ناموفق"
+
+
 # ======================================================================================================================
 class CouponModels(models.Model):
     code = models.CharField(max_length=20, unique=True)
@@ -22,10 +26,14 @@ class CouponModels(models.Model):
     expiration_date = models.DateField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
     def is_valid(self):
         return self.expiration_date >= timezone.now().date()
+
     def __str__(self):
         return f"{self.code} - {self.discount_percent}%"
+
+
 # ======================================================================================================================
 class UserAddressModels(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -36,8 +44,11 @@ class UserAddressModels(models.Model):
     is_default = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.address}, {self.city}"
+
+
 # ======================================================================================================================
 class OrderModels(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="orders")
@@ -46,9 +57,15 @@ class OrderModels(models.Model):
     city = models.CharField(max_length=100)
     zip_code = models.CharField(max_length=20)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=True)
-    coupon = models.ForeignKey(CouponModels, on_delete=models.SET_NULL, null=True, blank=True)
-    payment = models.ForeignKey(PaymentModels, on_delete=models.SET_NULL, null=True, blank=True)
-    status = models.IntegerField(choices=OrderStatusModels.choices, default=OrderStatusModels.PENDING)
+    coupon = models.ForeignKey(
+        CouponModels, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    payment = models.ForeignKey(
+        PaymentModels, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    status = models.IntegerField(
+        choices=OrderStatusModels.choices, default=OrderStatusModels.PENDING
+    )
     total_price = models.DecimalField(max_digits=12, decimal_places=0)
     final_price = models.DecimalField(max_digits=12, decimal_places=0)
     tax = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal(0.09))
@@ -69,18 +86,25 @@ class OrderModels(models.Model):
             discount_amount = self.total_price * (self.coupon.discount_percent / 100)
             return self.total_price - discount_amount
         return self.total_price
+
+
 # ======================================================================================================================
 class OrderItemModels(models.Model):
-    order = models.ForeignKey(OrderModels, on_delete=models.CASCADE, related_name="items")
+    order = models.ForeignKey(
+        OrderModels, on_delete=models.CASCADE, related_name="items"
+    )
     product = models.ForeignKey(PlantProduct, on_delete=models.PROTECT)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return f"{self.quantity} x {self.product.name}"
 
     @property
     def total_price(self):
         return self.price * self.quantity
+
+
 # ======================================================================================================================

@@ -11,3 +11,5 @@ faker
 requests
 django-filter
 gunicorn
+black
+flake8

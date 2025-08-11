@@ -11,27 +11,57 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('order', '0003_alter_ordermodels_tax'),
+        ("order", "0003_alter_ordermodels_tax"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PaymentModels',
+            name="PaymentModels",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0.01'))])),
-                ('callback_url', models.URLField()),
-                ('description', models.TextField(blank=True, null=True)),
-                ('mobile', models.CharField(blank=True, max_length=15, null=True)),
-                ('email', models.EmailField(blank=True, max_length=254, null=True)),
-                ('status', models.IntegerField(choices=[(0, 'در انتظار'), (1, 'موفقیت'), (2, 'شکست خورده')], default=0)),
-                ('authority', models.CharField(blank=True, max_length=255, null=True)),
-                ('ref_id', models.CharField(blank=True, max_length=255, null=True)),
-                ('is_verified', models.BooleanField(default=False)),
-                ('paid_date', models.DateTimeField(blank=True, null=True)),
-                ('created_date', models.DateTimeField(auto_now_add=True)),
-                ('updated_date', models.DateTimeField(auto_now=True)),
-                ('order', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='payment', to='order.ordermodels')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "amount",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=10,
+                        validators=[
+                            django.core.validators.MinValueValidator(Decimal("0.01"))
+                        ],
+                    ),
+                ),
+                ("callback_url", models.URLField()),
+                ("description", models.TextField(blank=True, null=True)),
+                ("mobile", models.CharField(blank=True, max_length=15, null=True)),
+                ("email", models.EmailField(blank=True, max_length=254, null=True)),
+                (
+                    "status",
+                    models.IntegerField(
+                        choices=[(0, "در انتظار"), (1, "موفقیت"), (2, "شکست خورده")],
+                        default=0,
+                    ),
+                ),
+                ("authority", models.CharField(blank=True, max_length=255, null=True)),
+                ("ref_id", models.CharField(blank=True, max_length=255, null=True)),
+                ("is_verified", models.BooleanField(default=False)),
+                ("paid_date", models.DateTimeField(blank=True, null=True)),
+                ("created_date", models.DateTimeField(auto_now_add=True)),
+                ("updated_date", models.DateTimeField(auto_now=True)),
+                (
+                    "order",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="payment",
+                        to="order.ordermodels",
+                    ),
+                ),
             ],
         ),
     ]

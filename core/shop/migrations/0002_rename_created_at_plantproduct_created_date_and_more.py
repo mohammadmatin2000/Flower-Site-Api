@@ -7,40 +7,44 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shop', '0001_initial'),
+        ("shop", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='plantproduct',
-            old_name='created_at',
-            new_name='created_date',
+            model_name="plantproduct",
+            old_name="created_at",
+            new_name="created_date",
         ),
         migrations.AddField(
-            model_name='plantcategory',
-            name='created_date',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="plantcategory",
+            name="created_date",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='plantcategory',
-            name='updated_date',
+            model_name="plantcategory",
+            name="updated_date",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddField(
-            model_name='plantimage',
-            name='created_date',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="plantimage",
+            name="created_date",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='plantimage',
-            name='updated_date',
+            model_name="plantimage",
+            name="updated_date",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddField(
-            model_name='plantproduct',
-            name='updated_date',
+            model_name="plantproduct",
+            name="updated_date",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

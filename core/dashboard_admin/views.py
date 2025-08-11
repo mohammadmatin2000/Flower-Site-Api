@@ -1,29 +1,49 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from .serializers import (AdminUserSerializer,AdminOrderSerializer,AdminCouponSerializer,AdminTicketSerializer,AdminProfileSerializer
-                        ,AdminNewsletterSerializer,AdminProductSerializer,AdminCommentSerializer,AdminSecuritySerializer)
+from .serializers import (
+    AdminUserSerializer,
+    AdminOrderSerializer,
+    AdminCouponSerializer,
+    AdminTicketSerializer,
+    AdminProfileSerializer,
+    AdminNewsletterSerializer,
+    AdminProductSerializer,
+    AdminCommentSerializer,
+    AdminSecuritySerializer,
+)
 from .permissions import IsAdminOrSuperUser
 from shop.models import PlantProduct
-from order.models import OrderModels,CouponModels
+from order.models import OrderModels, CouponModels
 from comments.models import Comment
-from contact.models import ContactMessage,Newsletter
-from accounts.models import Profile,User
+from contact.models import ContactMessage, Newsletter
+from accounts.models import Profile, User
+
+
 # ======================================================================================================================
 class AdminSecurityViewSet(viewsets.GenericViewSet):
     permission_classes = [IsAdminOrSuperUser]
     serializer_class = AdminSecuritySerializer
 
     def create(self, request):
-        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer = self.get_serializer(
+            data=request.data, context={"request": request}
+        )
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "رمز عبور ادمین با موفقیت تغییر کرد."}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "رمز عبور ادمین با موفقیت تغییر کرد."},
+                status=status.HTTP_200_OK,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # ======================================================================================================================
 class AdminUserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminUserSerializer
     permission_classes = [IsAdminOrSuperUser]
+
+
 # ======================================================================================================================
 class AdminProfileViewSet(viewsets.ModelViewSet):
     serializer_class = AdminProfileSerializer
@@ -35,19 +55,24 @@ class AdminProfileViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         return Response(
             {"detail": "ساخت پروفایل از طریق API مجاز نیست."},
-            status=status.HTTP_405_METHOD_NOT_ALLOWED
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
+
     def perform_update(self, serializer):
         serializer.save()
 
     def perform_destroy(self, instance):
         pass
+
+
 # ======================================================================================================================
 class AdminProductViewSet(viewsets.ModelViewSet):
     queryset = PlantProduct.objects.all()
     serializer_class = AdminProductSerializer
     permission_classes = [IsAdminOrSuperUser]
-    lookup_field = 'slug'
+    lookup_field = "slug"
+
+
 # ======================================================================================================================
 class AdminOrderViewSet(viewsets.ModelViewSet):
     queryset = OrderModels.objects.all()
@@ -56,24 +81,34 @@ class AdminOrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+
+
 # ======================================================================================================================
 class AdminCouponViewSet(viewsets.ModelViewSet):
     queryset = CouponModels.objects.all()
     serializer_class = AdminCouponSerializer
     permission_classes = [IsAdminOrSuperUser]
+
+
 # ======================================================================================================================
 class AdminCommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = AdminCommentSerializer
     permission_classes = [IsAdminOrSuperUser]
+
+
 # ======================================================================================================================
 class AdminTicketViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = AdminTicketSerializer
     permission_classes = [IsAdminOrSuperUser]
+
+
 # ======================================================================================================================
 class AdminNewsletterViewSet(viewsets.ModelViewSet):
     queryset = Newsletter.objects.all()
     serializer_class = AdminNewsletterSerializer
     permission_classes = [IsAdminOrSuperUser]
+
+
 # ======================================================================================================================

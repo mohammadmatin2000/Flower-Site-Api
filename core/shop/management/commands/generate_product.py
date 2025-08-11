@@ -5,6 +5,8 @@ from django.utils.text import slugify
 import random
 from django.core.files.base import ContentFile
 import requests
+
+
 # ======================================================================================================================
 class Command(BaseCommand):
     help = "Generate fake PlantProduct data with Persian names"
@@ -14,7 +16,9 @@ class Command(BaseCommand):
 
         categories = list(PlantCategory.objects.all())
         if not categories:
-            self.stdout.write(self.style.ERROR("هیچ دسته‌بندی‌ای وجود ندارد! اول دسته‌بندی‌ها را بسازید."))
+            self.stdout.write(
+                self.style.ERROR("هیچ دسته‌بندی‌ای وجود ندارد! اول دسته‌بندی‌ها را بسازید.")
+            )
             return
 
         PLANT_TYPES = [choice[0] for choice in PlantProduct.PLANT_TYPES]
@@ -58,11 +62,17 @@ class Command(BaseCommand):
                     product_image = PlantImage(
                         product=product,
                     )
-                    product_image.image.save(image_name, ContentFile(response.content), save=True)
+                    product_image.image.save(
+                        image_name, ContentFile(response.content), save=True
+                    )
                     product_image.alt_text = f"تصویر محصول {name}"
                     product_image.save()
             except Exception as e:
-                self.stdout.write(self.style.WARNING(f"تصویر برای محصول {name} ذخیره نشد: {e}"))
+                self.stdout.write(
+                    self.style.WARNING(f"تصویر برای محصول {name} ذخیره نشد: {e}")
+                )
 
         self.stdout.write(self.style.SUCCESS("۱۰ محصول گیاهی فیک ساخته شد"))
+
+
 # ======================================================================================================================
