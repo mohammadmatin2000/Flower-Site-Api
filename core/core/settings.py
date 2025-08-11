@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
 
+
     'accounts',
     'shop',
     'comments',
@@ -174,4 +175,23 @@ SWAGGER_SETTINGS = {
             'in': 'header'
         }
     },
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default=" mohammadmatin13872008@gmail.com")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="hizp wqll tslh vomm")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
+DEFAULT_FROM_EMAIL = "mohammadmatin13872008@gmail.com"
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 48
+
+
+# تنظیمات djoser برای فعال‌سازی تایید ایمیل و فراموشی رمز
+DJOSER = {
+    'SEND_ACTIVATION_EMAIL': True,  # فعال‌سازی ایمیل تایید ثبت نام
+    'ACTIVATION_URL': 'activate/{uid}/{token}/',  # لینک تایید ایمیل
+    'PASSWORD_RESET_CONFIRM_URL': 'reset_password_confirm/{uid}/{token}/',  # لینک ریست رمز
+    'SERIALIZERS': {},  # میتونی اینجا سفارشی‌سازی کنی
 }
