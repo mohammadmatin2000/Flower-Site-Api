@@ -1,0 +1,167 @@
+Table USER {
+  id int [pk, increment]
+  email varchar [unique, not null]
+  is_staff boolean [not null]
+  is_active boolean [not null]
+  is_verified boolean [not null]
+  type int [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table PROFILE {
+  id int [pk, increment]
+  user_id int [ref: > USER.id]
+  first_name varchar
+  last_name varchar
+  image varchar
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table PLANTCATEGORY {
+  id int [pk, increment]
+  title varchar [unique, not null]
+  slug varchar [unique, not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table PLANTPRODUCT {
+  id int [pk, increment]
+  category_id int [ref: > PLANTCATEGORY.id]
+  name varchar [not null]
+  scientific_name varchar
+  slug varchar [unique, not null]
+  plant_type varchar [not null]
+  description text
+  care_instructions text
+  height_cm decimal(5,1)
+  price decimal(10,2) [not null]
+  discount_percent int
+  stock int [not null]
+  status varchar [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table PLANTIMAGE {
+  id int [pk, increment]
+  product_id int [ref: > PLANTPRODUCT.id]
+  image varchar [not null]
+  alt_text varchar
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table CART {
+  id int [pk, increment]
+  user_id int [ref: > USER.id]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table CARTITEM {
+  id int [pk, increment]
+  cart_id int [ref: > CART.id]
+  product_id int [ref: > PLANTPRODUCT.id]
+  quantity int [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table COMMENT {
+  id int [pk, increment]
+  product_id int [ref: > PLANTPRODUCT.id]
+  user_id int [ref: > USER.id]
+  parent_id int [ref: > COMMENT.id, null]
+  body text [not null]
+  is_active boolean [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table CONTACTMESSAGE {
+  id int [pk, increment]
+  name varchar [not null]
+  email varchar [not null]
+  subject varchar
+  message text [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table NEWSLETTER {
+  id int [pk, increment]
+  email varchar [unique, not null]
+  is_active boolean [not null]
+  subscribed_date datetime [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table USERADDRESS {
+  id int [pk, increment]
+  user_id int [ref: > USER.id]
+  address varchar [not null]
+  state varchar [not null]
+  city varchar [not null]
+  zip_code varchar [not null]
+  is_default boolean [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table COUPON {
+  id int [pk, increment]
+  code varchar [unique, not null]
+  discount_percent decimal(5,2) [not null]
+  max_usage_limit int [not null]
+  expiration_date date [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table PAYMENT {
+  id int [pk, increment]
+  amount decimal(10,2) [not null]
+  callback_url varchar [not null]
+  description text
+  mobile varchar
+  email varchar
+  status int [not null]
+  authority varchar
+  ref_id varchar
+  is_verified boolean [not null]
+  paid_date datetime
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table ORDER {
+  id int [pk, increment]
+  user_id int [ref: > USER.id]
+  address varchar [not null]
+  state varchar [not null]
+  city varchar [not null]
+  zip_code varchar [not null]
+  cart_id int [ref: > CART.id, null]
+  coupon_id int [ref: > COUPON.id, null]
+  payment_id int [ref: > PAYMENT.id, null]
+  status int [not null]
+  total_price decimal(12,0) [not null]
+  final_price decimal(12,0) [not null]
+  tax decimal(10,2) [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}
+
+Table ORDERITEM {
+  id int [pk, increment]
+  order_id int [ref: > ORDER.id]
+  product_id int [ref: > PLANTPRODUCT.id]
+  price decimal(10,2) [not null]
+  quantity int [not null]
+  created_date datetime [not null]
+  updated_date datetime [not null]
+}

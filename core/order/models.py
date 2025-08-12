@@ -5,8 +5,6 @@ from shop.models import PlantProduct
 from cart.models import Cart
 from accounts.models import User, Profile
 from payment.models import PaymentModels
-
-
 # ======================================================================================================================
 class OrderStatusModels(models.IntegerChoices):
     PENDING = 1, "در حال بررسی"
@@ -15,8 +13,6 @@ class OrderStatusModels(models.IntegerChoices):
     SHIPPED = 4, "ارسال‌شده"
     CANCELED = 5, "لغوشده"
     FAILED = 6, "ناموفق"
-
-
 # ======================================================================================================================
 class CouponModels(models.Model):
     code = models.CharField(max_length=20, unique=True)
@@ -32,8 +28,6 @@ class CouponModels(models.Model):
 
     def __str__(self):
         return f"{self.code} - {self.discount_percent}%"
-
-
 # ======================================================================================================================
 class UserAddressModels(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,8 +41,6 @@ class UserAddressModels(models.Model):
 
     def __str__(self):
         return f"{self.address}, {self.city}"
-
-
 # ======================================================================================================================
 class OrderModels(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="orders")
@@ -86,8 +78,6 @@ class OrderModels(models.Model):
             discount_amount = self.total_price * (self.coupon.discount_percent / 100)
             return self.total_price - discount_amount
         return self.total_price
-
-
 # ======================================================================================================================
 class OrderItemModels(models.Model):
     order = models.ForeignKey(
@@ -105,6 +95,4 @@ class OrderItemModels(models.Model):
     @property
     def total_price(self):
         return self.price * self.quantity
-
-
 # ======================================================================================================================

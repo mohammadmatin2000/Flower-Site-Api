@@ -1,15 +1,41 @@
+# فریمورک جنگو
 django==4.2
+
+# خواندن متغیرهای محیطی از فایل .env
 python-decouple
+
+# درایور PostgreSQL به همراه باینری‌های مورد نیاز
 psycopg[binary]
+
+# فریمورک REST API جنگو
 djangorestframework
-markdown
-django-filter
-drf-yasg
-Pillow
+
+# JWT برای احراز هویت توکن‌محور
 djangorestframework-simplejwt
-faker
-requests
+
+# فیلتر کردن داده‌ها در APIها
 django-filter
+
+# تولید مستندات Swagger برای API
+drf-yasg
+
+# پشتیبانی از فرمت Markdown (مثلا در مستندات)
+markdown
+
+# کار با تصاویر (مثلا آپلود عکس)
+Pillow
+
+# تولید داده‌های تستی و نمونه (fake data)
+faker
+
+# ارسال درخواست HTTP به سرورهای دیگر
+requests
+
+# سرور HTTP برای تولید (در سرورهای لینوکسی)
 gunicorn
+
+# ابزار فرمت‌بندی خودکار کد پایتون
 black
+
+# ابزار بررسی استانداردهای کدنویسی (linting)
 flake8
