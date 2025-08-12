@@ -1,6 +1,5 @@
 <div align="center">
-<h1 align="center">Flower-Site-Api
-</h1>
+  <h1>🌸 Flower-Site-Api 🌸</h1>
 </div>
 <p align="center">
 <a href="https://www.python.org" target="_blank"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a>
@@ -61,19 +60,23 @@
 <img width="1900" height="498" alt="Screenshot 2025-08-12 111714" src="https://github.com/user-attachments/assets/166443d5-16ef-4c6a-ab9d-231581b8fb7d" />
 <hr>
 
-# Guideline
-- [Goal](#goal)
-- [Extera features](#extera-features)
-- [Setup](#setup)
-    - [First step](#first-step)
-    - [Clone it](#clone-it)
-    - [Docker](#docker)
-        - [Development](#development)
-            - [Pytest](#django-debug-toolbar)
-            - [Flake8 and Black](#flake8-and-black)
-        - [Deployment](#deployment)
-            - [Gunicorn and Nginx](#gunicorn-and-nginx)
-- [DB schema](#db-schema)
+
+# 📋 Table of Contents
+- [🎯 Goal](#-goal)
+- [✨ Extra Features](#-extra-features)
+- [🚀 Setup](#-setup)
+  - [🔹 First Step](#-first-step)
+  - [🔹 Clone it](#-clone-it)
+  - [🐳 Docker](#-docker)
+    - [🛠 Development](#-development)
+      - [🔍 Pytest](#-pytest)
+      - [🎨 Flake8 and Black](#-flake8-and-black)
+    - [🚢 Deployment](#-deployment)
+      - [⚙ Gunicorn and Nginx](#-gunicorn-and-nginx)
+- [🗄 DB Schema](#-db-schema)
+- [👤 User Types](#-user-types)
+- [💳 Payment Method](#-payment-method)
+- [🙏 Thanks](#-thanks-for-visiting)
             
 
 
